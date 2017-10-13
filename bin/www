@@ -7,25 +7,35 @@
 var app = require('../app');
 var debug = require('debug')('express-tutorial:server');
 var http = require('http');
+var fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '3000');
+var mask = process.umask(0);
+var socket = '/tmp/tutorial.sock'
+var server = http.createServer(app);
+
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
+switch(app.get('env')){
+  case "production":
+    server.listen(socket, function() {
+      if(mask){
+        process.umask(mask);
+        mask = null;
+      }
+    })
+    break;
+  default:
+    server.listen(port);
+}
 
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 

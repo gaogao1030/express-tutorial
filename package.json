@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "supervisor -e js,css,html, -w app.js,routes,views  ./bin/www"
+    "start": "supervisor -e js,css,html, -w app.js,routes,views  ./bin/www",
+    "release": "export NODE_ENV=production && pm2 start ./bin/www --name=tutorial"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
